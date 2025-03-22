@@ -1,5 +1,6 @@
 {
     "name": "souidev/laravel-clictopay",
+    "vendor_name": "souidev",
     "description": "Laravel integration for ClicToPay payment gateway",
     "keywords": [
         "souidev",
