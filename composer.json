@@ -42,8 +42,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Souidev\\ClicToPayLaravel\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Souidev\\ClicToPayLaravel\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -64,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "ClicToPayLaravelServiceProvider"
+                "Souidev\\ClicToPayLaravel\\ClicToPayLaravelServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "ClicToPay"
+                "ClicToPay": "Souidev\\ClicToPayLaravel\\Facades\\ClicToPay"
             }
         }
     },

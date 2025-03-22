@@ -8,10 +8,13 @@ beforeEach(function () {
         'api_base_url' => 'https://test.clictopay.com/payment/rest/',
         'username' => 'test_user',
         'password' => 'test_pass',
+        'test_mode' => true,
+        'return_url' => 'https://example.com/return',
+        'fail_url' => 'https://example.com/fail',
     ];
-    
+
     $this->service = new ClicToPayService($this->config);
-    
+
     $this->validParams = [
         'userName' => 'test_user',
         'password' => 'test_pass',
@@ -40,7 +43,7 @@ it('can register a payment successfully', function () {
 
 it('throws exception when required parameters are missing for payment registration', function () {
     $invalidParams = array_diff_key($this->validParams, ['orderNumber' => '']);
-    
+
     $this->service->registerPayment($invalidParams);
 })->throws(Exception::class, 'Missing required parameter: orderNumber');
 
@@ -161,7 +164,7 @@ it('handles API errors appropriately', function () {
     ]);
 
     $this->service->registerPayment($this->validParams);
-})->throws(Exception::class, 'Failed to register payment');
+})->throws(Exception::class, 'Invalid credentials');
 
 it('handles network errors appropriately', function () {
     Http::fake([
@@ -169,4 +172,14 @@ it('handles network errors appropriately', function () {
     ]);
 
     $this->service->registerPayment($this->validParams);
-})->throws(Exception::class, 'Error registering payment');
+})->throws(Exception::class, 'Failed to register payment');
+
+it('handles missing error message appropriately', function () {
+    Http::fake([
+        '*' => Http::response([
+            'errorCode' => '100'
+        ], 400)
+    ]);
+
+    $this->service->registerPayment($this->validParams);
+})->throws(Exception::class, 'Failed to register payment');
