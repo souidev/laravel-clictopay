@@ -10,7 +10,5 @@ parameters:
     tmpDir: build/phpstan
     checkOctaneCompatibility: true
     checkModelProperties: true
-    checkMissingIterableValueType: false
-    # Add rule to ignore env() calls in config directory
     ignoreErrors:
         - '#Called env\(\) outside of the config directory#'
