@@ -1,10 +1,13 @@
 {
     "name": "souidev/laravel-clictopay",
-    "description": ":package_description",
+    "description": "Laravel integration for ClicToPay payment gateway",
     "keywords": [
-        ":vendor_name",
+        "souidev",
         "laravel",
-        ":package_slug"
+        "clictopay",
+        "payment",
+        "gateway",
+        "tunisia"
     ],
     "homepage": "https://github.com/souidev/laravel-clictopay",
     "license": "MIT",
