@@ -21,7 +21,7 @@ beforeEach(function () {
         'orderNumber' => '123',
         'amount' => 1000,
         'currency' => 'TND',
-        'returnUrl' => 'https://example.com/return'
+        'returnUrl' => 'https://example.com/return',
     ];
 });
 
@@ -29,8 +29,8 @@ it('can register a payment successfully', function () {
     Http::fake([
         '*' => Http::response([
             'orderId' => '123456',
-            'formUrl' => 'https://test.clictopay.com/payment/form/123456'
-        ], 200)
+            'formUrl' => 'https://test.clictopay.com/payment/form/123456',
+        ], 200),
     ]);
 
     $response = $this->service->registerPayment($this->validParams);
@@ -51,8 +51,8 @@ it('can register a pre-authorization successfully', function () {
     Http::fake([
         '*' => Http::response([
             'orderId' => '123456',
-            'formUrl' => 'https://test.clictopay.com/payment/form/123456'
-        ], 200)
+            'formUrl' => 'https://test.clictopay.com/payment/form/123456',
+        ], 200),
     ]);
 
     $response = $this->service->registerPreAuth($this->validParams);
@@ -68,14 +68,14 @@ it('can confirm a payment successfully', function () {
         'userName' => 'test_user',
         'password' => 'test_pass',
         'orderId' => '123456',
-        'amount' => 1000
+        'amount' => 1000,
     ];
 
     Http::fake([
         '*' => Http::response([
             'errorCode' => '0',
-            'errorMessage' => 'Success'
-        ], 200)
+            'errorMessage' => 'Success',
+        ], 200),
     ]);
 
     $response = $this->service->confirmPayment($confirmParams);
@@ -90,14 +90,14 @@ it('can cancel a payment successfully', function () {
     $cancelParams = [
         'userName' => 'test_user',
         'password' => 'test_pass',
-        'orderId' => '123456'
+        'orderId' => '123456',
     ];
 
     Http::fake([
         '*' => Http::response([
             'errorCode' => '0',
-            'errorMessage' => 'Success'
-        ], 200)
+            'errorMessage' => 'Success',
+        ], 200),
     ]);
 
     $response = $this->service->cancelPayment($cancelParams);
@@ -113,14 +113,14 @@ it('can refund a payment successfully', function () {
         'userName' => 'test_user',
         'password' => 'test_pass',
         'orderId' => '123456',
-        'amount' => 1000
+        'amount' => 1000,
     ];
 
     Http::fake([
         '*' => Http::response([
             'errorCode' => '0',
-            'errorMessage' => 'Success'
-        ], 200)
+            'errorMessage' => 'Success',
+        ], 200),
     ]);
 
     $response = $this->service->refundPayment($refundParams);
@@ -135,15 +135,15 @@ it('can get payment status successfully', function () {
     $statusParams = [
         'userName' => 'test_user',
         'password' => 'test_pass',
-        'orderId' => '123456'
+        'orderId' => '123456',
     ];
 
     Http::fake([
         '*' => Http::response([
             'OrderStatus' => 2,
             'ErrorCode' => '0',
-            'ErrorMessage' => 'Success'
-        ], 200)
+            'ErrorMessage' => 'Success',
+        ], 200),
     ]);
 
     $response = $this->service->getPaymentStatus($statusParams);
@@ -159,8 +159,8 @@ it('handles API errors appropriately', function () {
     Http::fake([
         '*' => Http::response([
             'errorCode' => '100',
-            'errorMessage' => 'Invalid credentials'
-        ], 400)
+            'errorMessage' => 'Invalid credentials',
+        ], 400),
     ]);
 
     $this->service->registerPayment($this->validParams);
@@ -168,7 +168,7 @@ it('handles API errors appropriately', function () {
 
 it('handles network errors appropriately', function () {
     Http::fake([
-        '*' => Http::response(null, 500)
+        '*' => Http::response(null, 500),
     ]);
 
     $this->service->registerPayment($this->validParams);
@@ -177,8 +177,8 @@ it('handles network errors appropriately', function () {
 it('handles missing error message appropriately', function () {
     Http::fake([
         '*' => Http::response([
-            'errorCode' => '100'
-        ], 400)
+            'errorCode' => '100',
+        ], 400),
     ]);
 
     $this->service->registerPayment($this->validParams);

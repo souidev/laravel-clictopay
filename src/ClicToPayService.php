@@ -2,14 +2,14 @@
 
 namespace Souidev\ClicToPayLaravel;
 
-
-use Illuminate\Support\Facades\Http;
 use Exception;
+use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
 class ClicToPayService
 {
     private $config;
+
     private $baseUrl;
 
     public function __construct(array $config)
@@ -23,15 +23,15 @@ class ClicToPayService
     /**
      * Register a payment with ClicToPay.
      *
-     * @param array $params
      * @return array|object
+     *
      * @throws Exception
      */
     public function registerPayment(array $params)
     {
         $requiredParams = ['userName', 'password', 'orderNumber', 'amount', 'currency', 'returnUrl'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new Exception("Missing required parameter: {$param}");
             }
         }
@@ -41,10 +41,10 @@ class ClicToPayService
             'language' => null,           // Payment page language (en, fr, ar)
             'pageView' => null,           // DESKTOP or MOBILE
             'jsonParams' => null,         // Additional parameters in JSON format (including email for notifications)
-//            'jsonParams' => json_encode([
-//                'email' => 'customer@example.com'
-//                // other optional parameters
-//            ])
+            //            'jsonParams' => json_encode([
+            //                'email' => 'customer@example.com'
+            //                // other optional parameters
+            //            ])
             'expirationDate' => null,     // Order expiration date (ISO 8601)
             'orderDescription' => null,   // Order description
             'merchantLogin' => null,      // Merchant identifier
@@ -53,39 +53,39 @@ class ClicToPayService
         // Merge optional parameters if provided
         $params = array_merge($optionalParams, array_filter($params));
 
-        $url = $this->baseUrl . 'register.do';
+        $url = $this->baseUrl.'register.do';
 
         try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 $data = $response->json();
                 throw new Exception($data['errorMessage'] ?? 'Failed to register payment');
             }
 
             return $response->json();
         } catch (Exception $e) {
-            throw new Exception('Error registering payment: ' . $e->getMessage());
+            throw new Exception('Error registering payment: '.$e->getMessage());
         }
     }
 
     /**
      * Register a pre-authorization with ClicToPay.
      *
-     * @param array $params
      * @return array|object
+     *
      * @throws Exception
      */
     public function registerPreAuth(array $params)
     {
         $requiredParams = ['userName', 'password', 'orderNumber', 'amount', 'currency', 'returnUrl'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new Exception("Missing required parameter: {$param}");
             }
         }
 
-        $url = $this->baseUrl . 'registerPreAuth.do';
+        $url = $this->baseUrl.'registerPreAuth.do';
         try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
             $data = $response->json();
@@ -95,9 +95,8 @@ class ClicToPayService
             }
 
             throw new RuntimeException($data['errorMessage'] ?? 'Failed to register pre-authorization.');
-
         } catch (Exception $e) {
-            throw new RuntimeException('Error registering pre-authorization: ' . $e->getMessage());
+            throw new RuntimeException('Error registering pre-authorization: '.$e->getMessage());
         }
     }
 
@@ -110,21 +109,19 @@ class ClicToPayService
     /**
      * Confirm a pre-authorized payment.
      *
-     * @param array $params
-     * @return array
      * @throws Exception
      */
     public function confirmPayment(array $params): array
     {
         $requiredParams = ['userName', 'password', 'orderId', 'amount'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new RuntimeException("Missing required parameter: {$param}");
             }
         }
-        $url = $this->baseUrl . 'deposit.do';
+        $url = $this->baseUrl.'deposit.do';
 
-        try{
+        try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
             $data = $response->json();
             if ($response->successful()) {
@@ -133,7 +130,7 @@ class ClicToPayService
 
             throw new RuntimeException($data['errorMessage'] ?? 'Failed to confirm payment.');
         } catch (Exception $e) {
-            throw new RuntimeException('Error confirming payment: ' . $e->getMessage());
+            throw new RuntimeException('Error confirming payment: '.$e->getMessage());
         }
 
     }
@@ -141,20 +138,20 @@ class ClicToPayService
     /**
      * Cancel a payment.
      *
-     * @param array $params
      * @return array
+     *
      * @throws Exception
      */
     public function cancelPayment(array $params)
     {
         $requiredParams = ['userName', 'password', 'orderId'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new RuntimeException("Missing required parameter: {$param}");
             }
         }
-        $url = $this->baseUrl . 'cancel.do';
-        try{
+        $url = $this->baseUrl.'cancel.do';
+        try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
             $data = $response->json();
             if ($response->successful()) {
@@ -163,29 +160,25 @@ class ClicToPayService
 
             throw new RuntimeException($data['errorMessage'] ?? 'Failed to cancel payment.');
         } catch (Exception $e) {
-            throw new RuntimeException('Error canceling payment: ' . $e->getMessage());
+            throw new RuntimeException('Error canceling payment: '.$e->getMessage());
         }
     }
-
-
 
     /**
      * Refund a payment.
      *
-     * @param array $params
-     * @return array
      * @throws Exception
      */
     public function refundPayment(array $params): array
     {
         $requiredParams = ['userName', 'password', 'orderId', 'amount'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new RuntimeException("Missing required parameter: {$param}");
             }
         }
-        $url = $this->baseUrl . 'refund.do';
-        try{
+        $url = $this->baseUrl.'refund.do';
+        try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
             $data = $response->json();
             if ($response->successful()) {
@@ -194,7 +187,7 @@ class ClicToPayService
 
             throw new RuntimeException($data['errorMessage'] ?? 'Failed to refund payment.');
         } catch (Exception $e) {
-            throw new RuntimeException('Error refunding payment: ' . $e->getMessage());
+            throw new RuntimeException('Error refunding payment: '.$e->getMessage());
         }
 
     }
@@ -202,15 +195,13 @@ class ClicToPayService
     /**
      * Get the status of a payment.
      *
-     * @param array $params
-     * @return array
      * @throws Exception
      */
     public function getPaymentStatus(array $params): array
     {
         $requiredParams = ['userName', 'password', 'orderId'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new RuntimeException("Missing required parameter: {$param}");
             }
         }
@@ -223,7 +214,7 @@ class ClicToPayService
         // Merge optional parameters if provided
         $params = array_merge($optionalParams, array_filter($params));
 
-        $url = $this->baseUrl . 'getOrderStatus.do';
+        $url = $this->baseUrl.'getOrderStatus.do';
 
         try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
@@ -235,27 +226,25 @@ class ClicToPayService
 
             throw new RuntimeException($data['errorMessage'] ?? 'Failed to get payment status.');
         } catch (Exception $e) {
-            throw new RuntimeException('Error getting payment status: ' . $e->getMessage());
+            throw new RuntimeException('Error getting payment status: '.$e->getMessage());
         }
     }
 
     /**
      * Get extended order status with additional fields
      *
-     * @param array $params
-     * @return array
      * @throws Exception
      */
     public function getExtendedOrderStatus(array $params): array
     {
         $requiredParams = ['userName', 'password', 'orderId'];
         foreach ($requiredParams as $param) {
-            if (!isset($params[$param])) {
+            if (! isset($params[$param])) {
                 throw new RuntimeException("Missing required parameter: {$param}");
             }
         }
 
-        $url = $this->baseUrl . 'getOrderStatusExtended.do';
+        $url = $this->baseUrl.'getOrderStatusExtended.do';
 
         try {
             $response = Http::asForm()->post($url, array_merge($this->config, $params));
@@ -267,7 +256,7 @@ class ClicToPayService
 
             throw new RuntimeException($data['errorMessage'] ?? 'Failed to get extended order status.');
         } catch (Exception $e) {
-            throw new RuntimeException('Error getting extended order status: ' . $e->getMessage());
+            throw new RuntimeException('Error getting extended order status: '.$e->getMessage());
         }
     }
 }

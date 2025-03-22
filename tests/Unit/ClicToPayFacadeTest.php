@@ -19,14 +19,14 @@ it('can be used to register a payment', function () {
         'orderNumber' => '123',
         'amount' => 1000,
         'currency' => 'TND',
-        'returnUrl' => 'https://example.com/return'
+        'returnUrl' => 'https://example.com/return',
     ];
 
     \Illuminate\Support\Facades\Http::fake([
         '*' => \Illuminate\Support\Facades\Http::response([
             'orderId' => '123456',
-            'formUrl' => 'https://test.clictopay.com/payment/form/123456'
-        ], 200)
+            'formUrl' => 'https://test.clictopay.com/payment/form/123456',
+        ], 200),
     ]);
 
     $response = ClicToPay::registerPayment($params);
